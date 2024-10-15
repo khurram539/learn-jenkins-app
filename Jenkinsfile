@@ -2,39 +2,48 @@ pipeline {
     agent any
 
     stages {
-        /*
-
         stage('Build') {
             agent {
                 docker {
-                    image 'node:18-alpine'
+                    image 'node:18'
                     reuseNode true
                 }
             }
             steps {
                 sh '''
-                    ls -la
+                    # Check Node.js and npm versions
                     node --version
                     npm --version
+
+                    # Install project dependencies
                     npm ci
+
+                    # Build the project
                     npm run build
+
+                    # List files in the current directory to verify build output
                     ls -la
                 '''
             }
         }
-        */
 
         stage('Test') {
             agent {
                 docker {
-                    image 'node:18-alpine'
+                    image 'node:18'
                     reuseNode true
                 }
             }
-
             steps {
                 sh '''
-                    #test -f build/index.html
+                    # Check Node.js and npm versions
+                    node --version
+                    npm --version
+
+                    # Install project dependencies (if not already installed)
+                    npm ci
+
+                    # Run tests
                     npm test
                 '''
             }
@@ -47,12 +56,18 @@ pipeline {
                     reuseNode true
                 }
             }
-
             steps {
                 sh '''
+                    # Install serve package
                     npm install serve
+
+                    # Serve the build directory
                     node_modules/.bin/serve -s build &
+
+                    # Wait for the server to start
                     sleep 10
+
+                    # Run Playwright tests
                     npx playwright test --reporter=html
                 '''
             }
