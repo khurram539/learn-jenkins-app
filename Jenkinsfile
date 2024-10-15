@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-
         stage('Build') {
             agent {
                 docker {
@@ -34,8 +33,8 @@ pipeline {
 
                     steps {
                         sh '''
-                            #test -f build/index.html
                             npm test
+                            ls -la jest-results
                         '''
                     }
                     post {
