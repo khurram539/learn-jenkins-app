@@ -39,7 +39,7 @@ pipeline {
                     }
                     post {
                         always {
-                            junit 'jest-results/junit.xml'
+                            junit '/home/ubuntu/Jenkins/learn-jenkins-app/test-results/junit.xml'
                         }
                     }
                 }
